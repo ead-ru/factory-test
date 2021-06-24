@@ -1,5 +1,5 @@
 from django.db import models
-from django.conf import settings
+from rest_framework import serializers
 
 
 class Poll(models.Model):
@@ -31,6 +31,10 @@ class Question(models.Model):
         ''' '''
         return self.text
 
+    def need_choices(self) -> bool:
+        ''' '''
+        return not (self.type == self.TYPE_TEXT)
+
 
 class QuestionChoice(models.Model):
     ''' '''
@@ -41,6 +45,13 @@ class QuestionChoice(models.Model):
     def __str__(self):
         ''' '''
         return self.text
+
+    def save(self, force_insert=False, force_update=False, using=None,
+            update_fields=None):
+        ''' '''
+        if not self.question.need_choices():
+            raise serializers.ValidationError('This type of question does not need choices')
+        super().save(force_insert, force_update, using, update_fields)
 
 
 class UserPoll(models.Model):

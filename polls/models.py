@@ -54,11 +54,21 @@ class QuestionChoice(models.Model):
         super().save(force_insert, force_update, using, update_fields)
 
 
+class UserPollManager(models.Manager):
+    ''' '''
+
+    def check_if_owner(self, poll_id: int, user_id: int) -> bool:
+        ''' '''
+        return self.filter(user_id=user_id, poll_id=poll_id).exists()
+
+
 class UserPoll(models.Model):
     ''' '''
 
     user_id = models.IntegerField()
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+
+    objects = UserPollManager()
 
 
 class Answer(models.Model):

@@ -16,7 +16,6 @@ Creating polls for users
 
 1. bad urls?
 1. generate anon user ids on server side
-1. multiple answers for one question
 
 # poll urls
 

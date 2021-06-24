@@ -79,6 +79,11 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     chosen = models.ForeignKey(QuestionChoice, on_delete=models.CASCADE, blank=True, null=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user_poll', 'question'], name='question_user_poll')
+        ]
+
     def save(self, force_insert=False, force_update=False, using=None,
             update_fields=None):
         ''' '''

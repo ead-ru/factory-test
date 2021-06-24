@@ -69,3 +69,6 @@ class AnswersViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     serializer_class = serializers.AnswerSerializer
 
+    def get_queryset(self):
+        ''' '''
+        return []

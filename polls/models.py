@@ -68,3 +68,16 @@ class Answer(models.Model):
     text = models.TextField(blank=True, null=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     chosen = models.ForeignKey(QuestionChoice, on_delete=models.CASCADE, blank=True, null=True)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+            update_fields=None):
+        ''' '''
+        if self.question.need_choices():
+            if not self.chosen or not self.question.choices.filter(id=self.chosen_id).exists():
+                raise serializers.ValidationError('Choose your answer from provided choices')
+            self.text = None
+        else:
+            if self.chosen and not self.text:
+                raise serializers.ValidationError('This answer does not need choices')
+            self.chosen = None
+        super().save(force_insert, force_update, using, update_fields)

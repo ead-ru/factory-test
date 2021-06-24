@@ -51,10 +51,10 @@ class AnswerSerializer(serializers.ModelSerializer):
             if hasattr(request, 'user') and not request.user.is_anonymous:
                 user_id = request.user.id
             else:
-                user_id = request.GET.get('uid', None)
+                user_id = request.GET.get('uid', 0)
             if user_id:
                 if not models.UserPoll.objects.check_if_owner(
-                    validated_data['user_poll'],
+                    validated_data['user_poll'].id,
                     user_id
                 ):
                     raise serializers.ValidationError('It is not your poll')

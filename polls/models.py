@@ -57,9 +57,9 @@ class QuestionChoice(models.Model):
 class UserPollManager(models.Manager):
     ''' '''
 
-    def check_if_owner(self, poll_id: int, user_id: int) -> bool:
+    def check_if_owner(self, user_poll_id: int, user_id: int) -> bool:
         ''' '''
-        return self.filter(user_id=user_id, poll_id=poll_id).exists()
+        return self.filter(user_id=user_id, id=user_poll_id).exists()
 
 
 class UserPoll(models.Model):

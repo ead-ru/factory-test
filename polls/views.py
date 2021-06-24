@@ -1,5 +1,6 @@
 from django.utils import timezone
-from rest_framework import viewsets, permissions, mixins, generics, status
+from django.contrib.auth import get_user_model
+from rest_framework import viewsets, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from polls import models
@@ -53,7 +54,14 @@ class UserPollViewSet(mixins.CreateModelMixin,
 
     def list(self, request, *args, **kwargs):
         ''' '''
-        self._user_id = request.GET.get('uid', None) if request.user.is_anonymous else request.user.id
+        if request.user.is_anonymous:
+            self._user_id = request.GET.get('uid', None)
+            User = get_user_model()
+            if User.objects.filter(id=self._user_id).exists():
+                # @todo error
+                self._user_id = None
+        else:
+            self._user_id = request.user.id
         return super().list(request, *args, **kwargs)
 
     def get_queryset(self):

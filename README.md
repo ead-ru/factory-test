@@ -15,9 +15,8 @@ Creating polls for users
 # known problems
 
 1. bad urls?
-1. question choices for any type of question
-1. user id and anon id
-1. no validation for ownership of userpoll or questionchoice
+1. generate anon user ids on server side
+1. multiple answers for one question
 
 # poll urls
 
@@ -52,10 +51,13 @@ Creating polls for users
 # users polls urls
 
 1. GET /polls/users/  list user's polls
+1. GET /polls/users/?uid=user_id  list anon user's polls
 1. POST /polls/users/ create user's poll
 `{"user_id": 1, "poll": 1}`
 
 # users answers urls
 
 1. POST /polls/answers/ create answer
+`{"text": "test answer", "user_poll": 1, "question": 1, "chosen": null}`
+1. POST /polls/answers/?uid=user_id create answer for anon user
 `{"text": "test answer", "user_poll": 1, "question": 1, "chosen": null}`

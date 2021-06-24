@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from polls import models
 
@@ -74,4 +75,9 @@ class UserPollSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request and hasattr(request, 'user') and not request.user.is_anonymous:
             validated_data['user_id'] = request.user.id
+        else:
+            # anon user_id should be generated on server side
+            User = get_user_model()
+            if User.objects.filter(id=validated_data['user_id']).exists():
+                raise serializers.ValidationError('Login to system or use another user_id')
         return super().create(validated_data)
